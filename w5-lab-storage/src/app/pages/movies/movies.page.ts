@@ -18,6 +18,7 @@ export class MoviesPage implements OnInit {
   editReleaseYear: string = '';
   movies: { name: string; year: string }[] = [];
   errorMessage: string = '';
+  currentlyEditing: number = 0;
 
   constructor(private storageService: StorageService) {}
   modalOpen: boolean = false;
@@ -44,13 +45,11 @@ export class MoviesPage implements OnInit {
     }
   }
 
-  async setMovie(index: number) {
-    if(this.movieName && this.releaseYear) {
-      this.movies[index] = {name: this.movieName, year: this.releaseYear}
+  async setMovie(index: number, name: string, year: string) {
+    if(name && year) {
+      this.movies[index] = {name: name, year: year}
       try{
        await this.storageService.set('movies', this.movies);
-       this.movieName = '';
-       this.releaseYear = '';
        this.errorMessage = '';
       } catch (error) {
        console.error("Error adding movie:", error);
@@ -64,6 +63,7 @@ export class MoviesPage implements OnInit {
 
   async editItem(itemIndex: number) {
     this.modalOpen = true;
+    this.currentlyEditing = itemIndex;
   }
 
   async loadMovies() {
@@ -91,14 +91,14 @@ export class MoviesPage implements OnInit {
   }
 
   saveEdit() {
-
+    this.modalOpen = false;
+    this.setMovie(this.currentlyEditing, this.editMovieName, this.editReleaseYear);
+    this.editMovieName = '';
+    this.editReleaseYear = '';
   }
 
   goBack() {
-
+    this.modalOpen = false;
   }
 
-  onDismiss(e: Event) {
-
-  }
 }
