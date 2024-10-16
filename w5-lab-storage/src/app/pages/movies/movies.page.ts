@@ -13,11 +13,14 @@ import { CommonModule } from '@angular/common';
 })
 export class MoviesPage implements OnInit {
   movieName: string = '';
+  editMovieName: string = '';
   releaseYear: string = '';
+  editReleaseYear: string = '';
   movies: { name: string; year: string }[] = [];
   errorMessage: string = '';
 
   constructor(private storageService: StorageService) {}
+  modalOpen: boolean = false;
 
   async ngOnInit() {
     await this.loadMovies();
@@ -41,22 +44,26 @@ export class MoviesPage implements OnInit {
     }
   }
 
-  async editItem(itemIndex: number) {
+  async setMovie(index: number) {
     if(this.movieName && this.releaseYear) {
-       this.movies[itemIndex] = {name: this.movieName, year: this.releaseYear}
-       try{
-        await this.storageService.set('movies', this.movies);
-        this.movieName = '';
-        this.releaseYear = '';
-        this.errorMessage = '';
-       } catch (error) {
-        console.error("Error adding movie:", error);
-        this.errorMessage = "Error making edit. Please try again.";
-       }
-    }
-    else {
-      this.errorMessage = "Please enter a name and release year for editing."
-    }
+      this.movies[index] = {name: this.movieName, year: this.releaseYear}
+      try{
+       await this.storageService.set('movies', this.movies);
+       this.movieName = '';
+       this.releaseYear = '';
+       this.errorMessage = '';
+      } catch (error) {
+       console.error("Error adding movie:", error);
+       this.errorMessage = "Error making edit. Please try again.";
+      }
+   }
+   else {
+     this.errorMessage = "Please enter a name and release year for editing."
+   }
+  }
+
+  async editItem(itemIndex: number) {
+    this.modalOpen = true;
   }
 
   async loadMovies() {
@@ -81,5 +88,17 @@ export class MoviesPage implements OnInit {
       console.error('Error deleting movie:', error);
       this.errorMessage = 'Error deleting movie. Please try again.';
     }
+  }
+
+  saveEdit() {
+
+  }
+
+  goBack() {
+
+  }
+
+  onDismiss(e: Event) {
+
   }
 }
