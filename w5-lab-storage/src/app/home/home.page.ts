@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -17,14 +18,11 @@ export class HomePage {
   keys: string[] = [""]
   pairs: string[] = []
 
-  constructor(private storage: Storage) {
-    storage.create();
-  }
+  constructor(private storage: StorageService) {}
 
   async setItem() {
     try {
       await this.storage.set(this.key, this.value);
-      console.log(this.key)
       this.output = `Set ${this.key}: ${this.value}`;
     } catch (error) {
       console.error("Error setting item", error);
@@ -45,7 +43,7 @@ export class HomePage {
   async removeItem() {
     try{
       this.output = `Deleting ${this.key}...`
-      await this.storage.remove(this.key);
+      await this.storage.delete(this.key);
     } catch (error) {
       console.error("Error deleting item", error)
       this.output = `Error deleting item: ${error}`
