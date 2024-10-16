@@ -1,13 +1,38 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>movies</ion-title>
+    <ion-title>My Movies</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">movies</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Movie Name</ion-label>
+    <ion-input [(ngModel)]="movieName"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Release Year</ion-label>
+    <ion-input [(ngModel)]="releaseYear"></ion-input>
+  </ion-item>
+  <ion-button expand="full" (click)="addMovie()">Add Movie</ion-button>
+
+  <ion-list>
+    @for (movie of movies; track movie; let i = $index) {
+      <ion-item-sliding>
+        <ion-item>
+          <ion-label>
+            <h2>{{ movie.name }}</h2>
+            <p>{{ movie.year }}</p>
+          </ion-label>
+          <ion-item-option (click)="editItem(i)">Edit</ion-item-option>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="deleteMovie(i)">Delete</ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    }
+  </ion-list>
+
+  <ion-text color="danger" *ngIf="errorMessage">
+    <p>{{ errorMessage }}</p>
+  </ion-text>
 </ion-content>

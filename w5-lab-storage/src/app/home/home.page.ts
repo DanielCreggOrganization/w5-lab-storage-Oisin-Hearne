@@ -3,6 +3,8 @@ import { Storage } from '@ionic/storage-angular';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { StorageService } from '../services/storage.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
@@ -18,7 +20,7 @@ export class HomePage {
   keys: string[] = [""]
   pairs: string[] = []
 
-  constructor(private storage: StorageService) {}
+  constructor(private storage: StorageService, private route: Router) {}
 
   async setItem() {
     try {
@@ -88,5 +90,9 @@ export class HomePage {
       console.error("Error getting items", error)
       this.output = `Error getting items: ${error}`
     }
+  }
+
+  movieNav() {
+    this.route.navigate(['/movies'])
   }
 }
